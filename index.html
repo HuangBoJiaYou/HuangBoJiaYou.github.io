@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>study-note-v2</title>
+    <link rel="shortcut icon" href="./images/logo.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+
+<div id="app">
+    <div id="cs-level">
+        <ul>
+            <li v-for="(item, index) in levels.slice(5)">
+                <img v-bind:src="item" alt="" :class="{active:index+5===nowLevelIndex}" @click="csHandleClick(index+5)">
+            </li>
+        </ul>
+        <ul>
+            <li v-for="(item, index) in levels.slice(0,5)" v-bind:value="'b/'+index">
+                <img v-bind:src="item" alt="" :class="{active: index===nowLevelIndex}" @click="csHandleClick(index)">
+            </li>
+        </ul>
+    </div>
+    <div id="fn-proc">
+        <ul>
+            <li v-for="(item, index) in fnCnts" v-bind:key="index" @click="fnHandleClick(item.clickEvent)">
+                {{ item.name }}
+            </li>
+        </ul>
+    </div>
+    <div id="in-cnt" :style="{transform: upOrDown[upDownIndex].style}">
+        <button><img :src="upOrDown[upDownIndex].imgUrl" alt="" @click="inButtonClick"></button>
+        <ul>
+            <li v-for="(item, index) in symbols"><img :src="item.imgUrl" alt="" @click="inSymbolClick(item.clickText)"></li>
+        </ul>
+        <label><input type="text" placeholder="请输入文字内容" v-model="words" @keyup.enter="inHandleEnter"></label>
+    </div>
+    <div id="pages">
+        <ul>
+            <li v-for="(item, index) in bodyContents" :key="index">
+                <span class="page-start">Page {{ index+1 }} &darr;</span>
+                <div class="page" v-html="item.join('')"></div>
+                <span class="page-end">Page {{ index+1 }} &uarr;</span>
+            </li>
+        </ul>
+    </div>
+    <div id="save-import" v-show="showSaveImport">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>标题</th>
+                    <th>有效页数</th>
+                    <th>上次保存</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item, index) in navs" :key="item.id">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.pageNum }}</td>
+                    <td>{{ item['lastestSave'] }}</td>
+                    <td><button @click="procRecords(item.id, 0)">覆盖</button> / <button @click="procRecords(item.id, 1)">导入</button> / <button @click="procRecords(item.id, 2)">删除</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="save-new"><button @click="saveNewFile">新建保存</button><button @click="showSaveImport=!showSaveImport">取消</button></div>
+    </div>
+</div>
+
+<script src="./js/dom-to-image.js"></script>
+<script src="./js/vue.js"></script>
+<script src="./js/apps.js"></script>
+</body>
+</html>
